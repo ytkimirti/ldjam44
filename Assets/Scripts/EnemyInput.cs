@@ -16,6 +16,7 @@ public class EnemyInput : CharacterInput
         if (target)
         {
             movementInput = (target.position - transform.position).normalized;
+            targetInput = target.position;
         }
     }
 }

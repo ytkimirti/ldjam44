@@ -8,12 +8,16 @@ using UnityEngine.Rendering;
 public class Limb : MonoBehaviour
 {
 
+    public string limbType;
     public bool isRight;
 
     [Header("References")]
     public float jointLength;
     public Transform joint0;
     public Transform joint1;
+    [Space]
+    public GameObject knifeGO;
+
 
     [Header("Walking")]
     public bool isWalking;
@@ -47,6 +51,8 @@ public class Limb : MonoBehaviour
 
     void Start()
     {
+        ChangeType(limbType);
+
         if (isArm)
         {
             target.localPosition = new Vector3(0, armHeight, 0);
@@ -63,6 +69,33 @@ public class Limb : MonoBehaviour
 
         if (GetComponent<SortingGroup>())
             GetComponent<SortingGroup>().sortingOrder = Mathf.RoundToInt(transform.localPosition.y * -10);
+    }
+
+    void ChangeType(string type)
+    {
+        knifeGO.SetActive(false);
+
+        switch (type)
+        {
+            case "arm":
+                isArm = true;
+                isWalking = false;
+                knifeGO.SetActive(true);
+                break;
+            case "arm_knife":
+                isArm = true;
+                isWalking = false;
+                knifeGO.SetActive(true);
+                break;
+            case "leg":
+                isArm = false;
+                isWalking = true;
+                break;
+            default:
+                isArm = false;
+                isWalking = false;
+                break;
+        }
     }
 
     void Update()

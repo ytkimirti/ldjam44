@@ -8,6 +8,7 @@ public class Spider : Entity
 {
     public float moveSpeed;
     public float maxSpeed;
+    public float damage;
 
     [Header("Limbs")]
     public int armCount;
@@ -52,6 +53,11 @@ public class Spider : Entity
     void Update()
     {
         sort.sortingOrder = Mathf.RoundToInt(transform.position.y / -10);
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+
+        }
     }
 
     void SpawnLimbs(bool isLeg)
@@ -71,13 +77,18 @@ public class Spider : Entity
 
             Limb limb = limbGO.GetComponent<Limb>();
 
-            limb.isWalking = isLeg;
-            limb.isArm = !isLeg;
+
 
             if (isLeg)
+            {
+                limb.limbType = "leg";
                 legs[i] = limb;
+            }
             else
+            {
+                limb.limbType = "arm_knife";
                 arms[i] = limb;
+            }
         }
     }
 
