@@ -28,6 +28,8 @@ public class Spider : Entity
     public GameObject limbPrefab;
     public GameObject eyePrefab;
     public Transform visualParent;
+    public float lerpSpeed;
+    public float lerpAmount;
 
     CharacterInput input;
     SortingGroup sort;
@@ -40,6 +42,7 @@ public class Spider : Entity
         rb = GetComponent<Rigidbody2D>();
 
         SpawnParts();
+        SpawnHealthBar();
     }
 
     void SpawnParts()
@@ -52,11 +55,31 @@ public class Spider : Entity
 
     void Update()
     {
-        sort.sortingOrder = Mathf.RoundToInt(transform.position.y / -10);
+        UpdateHealthBar();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        sort.sortingOrder = Mathf.RoundToInt(transform.position.y * -10);
+
+        Vector2 target = Vector2.ClampMagnitude((input.targetInput - (Vector2)transform.position) / 3, lerpAmount);
+
+        visualParent.localPosition = Vector2.Lerp(visualParent.localPosition, target, lerpSpeed * Time.deltaTime);
+    }
+
+    public override void OnAttackButtonPressed()
+    {
+        if (Vector2.Distance((Vector2)transform.position, (Vector2)input.targetInput) < meleeRadius)
         {
+            AttackLimbs(input.targetInput);
+            AttackArea(input.targetInput, damage);
+        }
+    }
 
+    public void AttackLimbs(Vector2 pos)
+    {
+        visualParent.localPosition = (input.targetInput - (Vector2)transform.position).normalized * lerpAmount * -1.2f;
+
+        foreach (Limb limb in arms)
+        {
+            limb.AttackLimb(pos);
         }
     }
 

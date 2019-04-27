@@ -11,15 +11,15 @@ public class Entity : Health
 
     void Start()
     {
-
+        SpawnHealthBar();
     }
 
-    void Update()
+    public virtual void OnAttackButtonPressed()
     {
 
     }
 
-    public virtual void Attack(Vector2 pos, float damage)
+    public virtual void AttackArea(Vector2 pos, float damage)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, searchArea, attackLayer);
 
@@ -27,7 +27,7 @@ public class Entity : Health
         {
             Collider2D col = colliders[i];
 
-            if (!col)
+            if (!col || col.gameObject == this.gameObject)
                 return;
 
             Health hp = col.gameObject.GetComponent<Health>();

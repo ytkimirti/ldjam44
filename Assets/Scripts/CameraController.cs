@@ -5,10 +5,13 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
+    [HideInInspector]
+    public Camera cam;
     public static CameraController main;
 
     void Awake()
     {
+        cam = Camera.main;
         main = this;
     }
 

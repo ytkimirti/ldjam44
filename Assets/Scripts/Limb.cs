@@ -17,6 +17,7 @@ public class Limb : MonoBehaviour
     public Transform joint1;
     [Space]
     public GameObject knifeGO;
+    public GameObject feetGO;
 
 
     [Header("Walking")]
@@ -34,6 +35,11 @@ public class Limb : MonoBehaviour
 
     public bool isArm;
     public float armHeight;
+    public float lerpSpeed;
+    public float attackSpeed;
+
+    [HideInInspector]
+    public CharacterInput input;
 
     bool isTweening;
     Vector2 defPos;
@@ -51,6 +57,8 @@ public class Limb : MonoBehaviour
 
     void Start()
     {
+        input = GetComponentInParent<CharacterInput>();
+
         ChangeType(limbType);
 
         if (isArm)
@@ -74,6 +82,7 @@ public class Limb : MonoBehaviour
     void ChangeType(string type)
     {
         knifeGO.SetActive(false);
+        feetGO.SetActive(false);
 
         switch (type)
         {
@@ -90,6 +99,7 @@ public class Limb : MonoBehaviour
             case "leg":
                 isArm = false;
                 isWalking = true;
+                feetGO.SetActive(true);
                 break;
             default:
                 isArm = false;
@@ -100,25 +110,48 @@ public class Limb : MonoBehaviour
 
     void Update()
     {
-        if (isWalking && Application.isPlaying)
+        if (Application.isPlaying)
+        {
+            if (isWalking)
+            {
+                feetGO.transform.eulerAngles = new Vector3(0, 0, 0);
+
+                if (!isTweening && Vector2.Distance(currPos, (Vector2)transform.position + defPos) > targetRadius)
+                {
+                    TweenTarget();
+                }
+
+                if (isTweening)
+                {
+                    currPos = target.position;
+                }
+                else
+                {
+                    target.position = currPos;
+                }
+            }
+            else if (isArm)
+            {
+                Vector2 mouseExtra = Vector2.ClampMagnitude((input.targetInput - (Vector2)target.position) / 4, jointLength * 1.9f);
+
+                isRight = mouseExtra.x > 0;
+
+                target.position = Vector2.Lerp(target.position, defPos + (Vector2)transform.position + mouseExtra, lerpSpeed * Time.deltaTime);
+            }
+        }
+        else
         {
 
-            if (!isTweening && Vector2.Distance(currPos, (Vector2)transform.position + defPos) > targetRadius)
-            {
-                TweenTarget();
-            }
-
-            if (isTweening)
-            {
-                currPos = target.position;
-            }
-            else
-            {
-                target.position = currPos;
-            }
         }
 
         MoveLimb(target.position);
+    }
+
+    public void AttackLimb(Vector2 pos)
+    {
+        Vector2 movePos = (pos - (Vector2)transform.position).normalized * 1.9f;
+
+        target.position = (Vector2)transform.position + movePos;
     }
 
     void TweenTarget()

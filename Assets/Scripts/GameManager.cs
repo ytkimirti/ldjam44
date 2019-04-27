@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+    public GameObject healthBarPrefab;
+
     public static GameManager main;
 
     void Awake()

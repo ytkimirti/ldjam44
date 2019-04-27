@@ -8,7 +8,7 @@ public class EnemyInput : CharacterInput
 
     void Start()
     {
-
+        Init();
     }
 
     void Update()
