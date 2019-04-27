@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Limbs
+    uniqueID: 130174849
+    locked: 0
   - name: Spider
     uniqueID: 1667321557
     locked: 0

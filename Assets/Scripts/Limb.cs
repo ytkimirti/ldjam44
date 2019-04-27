@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Rendering;
 
+[ExecuteInEditMode]
 public class Limb : MonoBehaviour
 {
+
+    public bool isRight;
 
     [Header("References")]
     public float jointLength;
@@ -22,33 +26,63 @@ public class Limb : MonoBehaviour
     public float tweenSpeed;
     public float tweenHeight;
 
+    [Header("Arms")]
+
+    public bool isArm;
+    public float armHeight;
+
     bool isTweening;
     Vector2 defPos;
     Vector2 currPos;
 
+    void Awake()
+    {
+        isRight = transform.localPosition.x > 0;
+
+        if (!isRight)
+        {
+            target.localPosition = new Vector3(-target.localPosition.x, target.localPosition.y, 0);
+        }
+    }
+
     void Start()
     {
+        if (isArm)
+        {
+            target.localPosition = new Vector3(0, armHeight, 0);
+
+            randomAmount /= 4;
+        }
+
         defPos = (Vector2)target.localPosition;
-        target.localPosition = target.localPosition + (Vector3)(Random.insideUnitCircle * randomAmount);
+
+        if (Application.isPlaying)
+            target.localPosition = target.localPosition + (Vector3)(Random.insideUnitCircle * randomAmount);
+
         currPos = defPos + (Vector2)transform.position;
+
+        if (GetComponent<SortingGroup>())
+            GetComponent<SortingGroup>().sortingOrder = Mathf.RoundToInt(transform.localPosition.y * -10);
     }
 
     void Update()
     {
-
-
-        if (!isTweening && Vector2.Distance(currPos, (Vector2)transform.position + defPos) > targetRadius)
+        if (isWalking && Application.isPlaying)
         {
-            TweenTarget();
-        }
 
-        if (isTweening)
-        {
-            currPos = target.position;
-        }
-        else
-        {
-            target.position = currPos;
+            if (!isTweening && Vector2.Distance(currPos, (Vector2)transform.position + defPos) > targetRadius)
+            {
+                TweenTarget();
+            }
+
+            if (isTweening)
+            {
+                currPos = target.position;
+            }
+            else
+            {
+                target.position = currPos;
+            }
         }
 
         MoveLimb(target.position);
@@ -91,7 +125,7 @@ public class Limb : MonoBehaviour
         // Angle from Joint0 and Target
         Vector2 diff = pos - (Vector2)joint0.position;
 
-        diff.y *= diff.x > 0 ? -1 : 1;
+        diff.y *= isRight ? -1 : 1;
 
         float atan = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 
@@ -112,7 +146,7 @@ public class Limb : MonoBehaviour
 
             // So they work in Unity reference frame
 
-            if (diff.x > 0)
+            if (isRight)
             {
                 jointAngle0 = (atan - angle0) * -1;
                 jointAngle1 = (180f - angle1) * -1;
