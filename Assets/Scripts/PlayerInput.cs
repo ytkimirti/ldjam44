@@ -11,6 +11,6 @@ public class PlayerInput : CharacterInput
 
     void Update()
     {
-
+        movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
     }
 }
