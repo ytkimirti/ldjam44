@@ -18,7 +18,9 @@ public class Limb : MonoBehaviour
     [Space]
     public GameObject knifeGO;
     public GameObject feetGO;
-
+    public GameObject gunGO;
+    [Space]
+    public GameObject bulletPrefab;
 
     [Header("Walking")]
     public bool isWalking;
@@ -34,9 +36,14 @@ public class Limb : MonoBehaviour
     [Header("Arms")]
 
     public bool isArm;
+    public bool isKnife;
     public float armHeight;
     public float lerpSpeed;
     public float attackSpeed;
+
+    [Header("Guns")]
+
+    public bool isGun;
 
     [HideInInspector]
     public CharacterInput input;
@@ -83,6 +90,10 @@ public class Limb : MonoBehaviour
     {
         knifeGO.SetActive(false);
         feetGO.SetActive(false);
+        gunGO.SetActive(false);
+
+        isGun = false;
+        isKnife = false;
 
         switch (type)
         {
@@ -94,7 +105,15 @@ public class Limb : MonoBehaviour
             case "arm_knife":
                 isArm = true;
                 isWalking = false;
+                isKnife = true;
                 knifeGO.SetActive(true);
+                break;
+
+            case "arm_gun":
+                isArm = true;
+                isWalking = false;
+                isGun = true;
+                gunGO.SetActive(true);
                 break;
             case "leg":
                 isArm = false;

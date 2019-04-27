@@ -109,7 +109,7 @@ public class Spider : Entity
             }
             else
             {
-                limb.limbType = "arm_knife";
+                limb.limbType = "arm_gun";
                 arms[i] = limb;
             }
         }
