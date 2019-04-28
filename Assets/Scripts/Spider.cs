@@ -6,9 +6,20 @@ using UnityEngine.Rendering;
 
 public class Spider : Entity
 {
+    public bool isPlayer;
     public float moveSpeed;
     public float maxSpeed;
+    public Color color;
+    public Color secondColor;
+    [Space]
+    public float moveSpeedIncrease;
+    [Space]
     public float damage;
+    [Space]
+    public float damageIncrease;
+    public float dashSpeed;
+    public float dashDelay;
+    float dashTimer;
 
     [Header("Limbs")]
     public int armCount;
@@ -25,6 +36,7 @@ public class Spider : Entity
 
 
     [Header("References")]
+    public SpriteRenderer mainSprite;
     public GameObject limbPrefab;
     public GameObject eyePrefab;
     public Transform visualParent;
@@ -43,14 +55,86 @@ public class Spider : Entity
 
         SpawnParts();
         SpawnHealthBar();
+
+        SetColor(color, secondColor);
     }
 
     void SpawnParts()
     {
+
         SpawnLimbs(true);
         SpawnLimbs(false);
 
         SpawnEyes();
+    }
+
+    public void ShakeEffect()
+    {
+        foreach (Eye eye in eyes)
+        {
+            eye.Wink();
+        }
+
+        mainSprite.color = GameManager.main.damagedColor;
+        mainSprite.DOColor(color, 0.1f).SetDelay(0.2f);
+        visualParent.transform.localPosition = Random.insideUnitCircle * 0.3f;
+    }
+
+    public override void AddGore(Vector2 attackPos)
+    {
+        ShakeEffect();
+
+        Vector2 diff = ((Vector2)attackPos - (Vector2)transform.position).normalized * Random.Range(0f, 0.5f);
+
+        float diffAngle = diff.ToAngle();
+
+        ParticleManager.main.play(diff + (Vector2)visualParent.position, new Vector3(0, 0, diffAngle), 1);
+
+        Instantiate(GameManager.main.gorePrefab, diff + (Vector2)visualParent.position, Quaternion.Euler(0, 0, diffAngle), visualParent);
+    }
+
+    public override void AttackArea(Vector2 pos, float damage)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, searchArea, attackLayer);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider2D col = colliders[i];
+
+            if (!col || col.gameObject == this.gameObject)
+                return;
+
+            Health hp = col.gameObject.GetComponent<Health>();
+
+            if (hp)
+            {
+                hp.GetDamage(damage);
+
+                if (hp.GetComponent<Entity>())
+                {
+                    hp.GetComponent<Entity>().AddGore(transform.position);
+                }
+            }
+        }
+    }
+
+    public void SetColor(Color col, Color sec)
+    {
+        foreach (Limb arm in arms)
+        {
+            arm.SetColor(col, sec);
+        }
+
+        foreach (Eye eye in eyes)
+        {
+            eye.SetColor(col);
+        }
+        foreach (Limb arm in legs)
+        {
+            arm.SetColor(col, sec);
+        }
+        mainSprite.color = col;
+
     }
 
     void Update()
@@ -109,7 +193,7 @@ public class Spider : Entity
             }
             else
             {
-                limb.limbType = "arm_gun";
+                limb.limbType = "arm_knife";
                 arms[i] = limb;
             }
         }
@@ -133,6 +217,15 @@ public class Spider : Entity
     {
         rb.AddForce(moveSpeed * input.movementInput);
 
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+        if (dashTimer < dashDelay / 2)
+            rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+
+        dashTimer -= Time.deltaTime;
+
+        if (dashTimer <= 0 && Input.GetKeyDown(KeyCode.Space) && isPlayer)
+        {
+            rb.velocity = dashSpeed * input.movementInput;
+            dashTimer = dashDelay;
+        }
     }
 }

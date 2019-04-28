@@ -9,12 +9,14 @@ public class PlayerInput : CharacterInput
 
     void Start()
     {
+        GetComponent<Spider>().isPlayer = true;
         cam = CameraController.main.cam;
         Init();
     }
 
     void Update()
     {
+
         movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         targetInput = cam.ScreenToWorldPoint(Input.mousePosition);
 

@@ -191,7 +191,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1647879486138026}
-  m_LocalRotation: {x: 0, y: 0, z: 0.021462165, w: 0.9997697}
+  m_LocalRotation: {x: 0, y: 0, z: 0.18832713, w: 0.9821064}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -246,7 +246,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1012785239439254}
-  m_LocalRotation: {x: 0, y: 0, z: -0.72662824, w: 0.68703085}
+  m_LocalRotation: {x: 0, y: 0, z: -0.83127075, w: 0.55586785}
   m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -303,7 +303,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1667400878583636}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.986, y: -0.957, z: 0}
+  m_LocalPosition: {x: 0.916, y: -0.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4008088986247130}
@@ -418,6 +418,9 @@ MonoBehaviour:
   jointLength: 1
   joint0: {fileID: 4060419461227790}
   joint1: {fileID: 4549042296507058}
+  joint0Sprite: {fileID: 212320854417649208}
+  joint1Sprite: {fileID: 212633548722527032}
+  feetSprite: {fileID: 212741704165787784}
   knifeGO: {fileID: 1371905745502992}
   feetGO: {fileID: 1675235414809152}
   gunGO: {fileID: 1172969533193950}
@@ -444,7 +447,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 1667321557
   m_SortingLayer: 2
-  m_SortingOrder: -39
+  m_SortingOrder: -31
 --- !u!212 &212138661290826562
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -5,7 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+    public Color damagedColor;
     public GameObject healthBarPrefab;
+    public GameObject gorePrefab;
 
     public static GameManager main;
 

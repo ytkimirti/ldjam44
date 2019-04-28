@@ -19,6 +19,11 @@ public class Entity : Health
 
     }
 
+    public virtual void AddGore(Vector2 attackPos)
+    {
+
+    }
+
     public virtual void AttackArea(Vector2 pos, float damage)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, searchArea, attackLayer);

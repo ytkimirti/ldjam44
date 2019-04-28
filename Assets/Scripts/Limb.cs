@@ -15,6 +15,9 @@ public class Limb : MonoBehaviour
     public float jointLength;
     public Transform joint0;
     public Transform joint1;
+    public SpriteRenderer joint0Sprite;
+    public SpriteRenderer joint1Sprite;
+    public SpriteRenderer feetSprite;
     [Space]
     public GameObject knifeGO;
     public GameObject feetGO;
@@ -60,6 +63,13 @@ public class Limb : MonoBehaviour
         {
             target.localPosition = new Vector3(-target.localPosition.x, target.localPosition.y, 0);
         }
+    }
+
+    public void SetColor(Color mainCol, Color secondCol)
+    {
+        joint0Sprite.color = secondCol;
+        joint1Sprite.color = mainCol;
+        feetSprite.color = mainCol;
     }
 
     void Start()
@@ -185,6 +195,8 @@ public class Limb : MonoBehaviour
         isTweening = false;
 
         currPos = target.position;
+
+        ParticleManager.main.play(target.position, Vector3.zero, 0);
     }
 
     private void OnDrawGizmosSelected()

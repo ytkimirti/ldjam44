@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 1208918135
+    locked: 0
+  - name: footprint
+    uniqueID: 2046593809
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
