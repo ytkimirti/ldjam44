@@ -41,9 +41,12 @@ public class GameManager : MonoBehaviour
     public float areaIncreaseOverEye;
     public float defArea;
     public float defSight;
+    public Animator endGameAnim;
+    public TextMeshProUGUI killText;
 
     public PixelCamera pixelCam;
 
+    public int killCount;
 
     public Transform cameraTopTrans;
 
@@ -51,9 +54,25 @@ public class GameManager : MonoBehaviour
 
     public static GameManager main;
 
+    public bool isGameEnded = false;
+
     void Awake()
     {
         main = this;
+    }
+
+    public void EndGame()
+    {
+        if (isGameEnded)
+            return;
+
+        isGameEnded = true;
+
+        endGameAnim.SetTrigger("end");
+
+        killText.text = "Thus, you started a \nhuge chaos and killed \n" + killCount.ToString() + " spiders";
+
+        Destroy(Camera.main.GetComponent<AudioListener>());
     }
 
     void Start()
@@ -163,6 +182,16 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Application.LoadLevel(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Camera.main.GetComponent<AudioListener>().enabled = !Camera.main.GetComponent<AudioListener>().enabled;
+        }
+
         if (player)
         {
             currentHealth.text = Mathf.RoundToInt(player.currentHealth).ToString();

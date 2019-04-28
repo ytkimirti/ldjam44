@@ -11,7 +11,6 @@ public class CharacterInput : MonoBehaviour
 
     public void Init()
     {
-        print("searchin");
         entity = GetComponent<Entity>();
     }
 

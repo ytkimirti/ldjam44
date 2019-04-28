@@ -77,11 +77,11 @@ MonoBehaviour:
       useCameraFov: 0
       kernelSize: 1
   motionBlur:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
-      shutterAngle: 327
+      shutterAngle: 284
       sampleCount: 10
-      frameBlending: 0
+      frameBlending: 0.86
   eyeAdaptation:
     m_Enabled: 0
     m_Settings:
@@ -293,7 +293,7 @@ MonoBehaviour:
       lut: {fileID: 0}
       contribution: 1
   chromaticAberration:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       spectralTexture: {fileID: 0}
       intensity: 1

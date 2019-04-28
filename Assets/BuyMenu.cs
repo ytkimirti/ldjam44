@@ -43,7 +43,7 @@ public class BuyMenu : MonoBehaviour
                 Open();
         }
 
-        if (player.currentHealth < 30 && !isOn)
+        if (player.currentHealth < 30 && !isOn && !GameManager.main.isGameEnded)
         {
 
             if (dieInfoText.localScale.x == 0)
@@ -59,6 +59,9 @@ public class BuyMenu : MonoBehaviour
                 dieInfoText.DOScale(Vector3.zero, 0.2f).SetEase(Ease.OutElastic);
             }
         }
+
+        if (GameManager.main.isGameEnded)
+            Time.timeScale = 1;
     }
 
     public void Open()

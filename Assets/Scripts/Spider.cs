@@ -70,13 +70,30 @@ public class Spider : Entity
 
         SetColor(color, secondColor);
 
+
         UpdateScale(spiderScale);
 
+        if (GetComponent<PlayerInput>())
+            isPlayer = true;
+
+        print("Starting croutine " + isPlayer);
         if (isPlayer)
         {
-            Invoke("IntroThing", 7.5f);
-            Invoke("NoFreeze", 11);
+
+            StartCoroutine(thing());
         }
+    }
+
+    IEnumerator thing()
+    {
+        print("im inside maan");
+        yield return new WaitForSeconds(7.5f);
+
+        IntroThing();
+
+        yield return new WaitForSeconds(3.5f);
+
+        NoFreeze();
     }
 
     public void NoFreeze()
@@ -244,6 +261,11 @@ public class Spider : Entity
     {
         AudioManager.main.Play("die");
         ParticleManager.main.play(transform.position, Vector2.zero, 2);
+
+        GameManager.main.killCount++;
+
+        if (isPlayer)
+            GameManager.main.EndGame();
 
         base.Die();
     }

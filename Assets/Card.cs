@@ -14,7 +14,6 @@ public class Card : MonoBehaviour
     void Start()
     {
         GetComponentInChildren<TextMeshProUGUI>().text = cost.ToString();
-        print("What het");
     }
 
     void Update()

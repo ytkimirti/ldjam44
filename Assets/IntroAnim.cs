@@ -45,6 +45,6 @@ public class IntroAnim : MonoBehaviour
 
         yield return new WaitForSeconds(4);
 
-        newPopup.transform.DOScale(Vector3.zero, 1).SetEase(Ease.InOutSine);
+        newPopup.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
     }
 }
