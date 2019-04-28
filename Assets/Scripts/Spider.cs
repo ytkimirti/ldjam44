@@ -54,6 +54,8 @@ public class Spider : Entity
 
     void Start()
     {
+        transform.position = Random.insideUnitCircle * 7;
+
         sort = GetComponentInChildren<SortingGroup>();
         input = GetComponent<CharacterInput>();
         rb = GetComponent<Rigidbody2D>();
@@ -153,24 +155,34 @@ public class Spider : Entity
 
             if (hp)
             {
-                hp.GetDamage(damage);
+                bool isHit = hp.GetDamage(damage);
 
                 if (hp.GetComponent<Entity>())
                 {
                     hp.GetComponent<Entity>().AddGore(transform.position);
                 }
+
+                if (isHit)
+                {
+                    GameManager.main.Drop(Mathf.RoundToInt(damage), hp.transform.position, transform, hp.transform.localScale.x / 2);
+                    currentHealth += damage;
+
+                    CheckHealth();
+                }
             }
         }
     }
 
-    public override void GetDamage(float amount)
+    public override bool GetDamage(float amount)
     {
         if (isShielding)
         {
             MetalEffect();
-            return;
+            return false;
         }
         base.GetDamage(amount);
+
+        return true;
     }
 
     public void SetColor(Color col, Color sec)
@@ -202,6 +214,8 @@ public class Spider : Entity
             {
                 injureTimer = 1 / injure;
                 currentHealth -= 1;
+
+                CheckHealth();
             }
         }
         attackTimer -= Time.deltaTime;

@@ -37,6 +37,20 @@ public class Health : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + Vector3.up * healthBarHeight, new Vector3(1, 0.1f, 0));
     }
 
+    public virtual bool CheckHealth()
+    {
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Die();
+            return true;
+        }
+
+        UpdateHealthBar();
+
+        return false;
+    }
+
     public void UpdateHealthBar()
     {
         if (!spawnHealthBar)
@@ -55,19 +69,12 @@ public class Health : MonoBehaviour
         healthBar.Die();
     }
 
-    public virtual void GetDamage(float amount)
+    public virtual bool GetDamage(float amount)
     {
         print(name + " got " + amount + "damage");
         currentHealth -= amount;
 
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            Die();
-            return;
-        }
-
-        UpdateHealthBar();
+        return CheckHealth();
     }
 
     public virtual void Die()

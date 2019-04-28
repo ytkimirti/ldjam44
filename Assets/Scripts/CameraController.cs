@@ -27,6 +27,9 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!target)
+            return;
+
         transform.position = Vector2.Lerp(transform.position, (Vector2)target.position + (Vector2)offset, lerpSpeed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, transform.position.y, offset.z);

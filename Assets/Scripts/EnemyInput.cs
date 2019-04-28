@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyInput : CharacterInput
 {
     public Transform target;
+    Spider targetScript;
     public float radius;
     public bool alarmed;
 
@@ -56,7 +57,11 @@ public class EnemyInput : CharacterInput
             }
         }
 
-        return GameManager.main.entityList[minID].transform;
+        Transform closest = GameManager.main.entityList[minID].transform;
+
+        targetScript = closest.GetComponent<Spider>();
+
+        return closest;
     }
 
     void Update()
@@ -105,6 +110,11 @@ public class EnemyInput : CharacterInput
                         attackTimer = Random.Range(randomAttackTime / 2, randomAttackTime);
                     }
                 }
+            }
+
+            if (targetScript && targetScript.currentHealth > spider.currentHealth)
+            {
+                movementInput = -movementInput;
             }
         }
         else
