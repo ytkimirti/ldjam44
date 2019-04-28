@@ -54,8 +54,6 @@ public class Spider : Entity
 
     void Start()
     {
-        transform.position = Random.insideUnitCircle * 7;
-
         sort = GetComponentInChildren<SortingGroup>();
         input = GetComponent<CharacterInput>();
         rb = GetComponent<Rigidbody2D>();
@@ -120,8 +118,6 @@ public class Spider : Entity
         if (isShielding)
             return;
 
-        injure++;
-
         ShakeEffect();
 
         Vector2 diff = ((Vector2)attackPos - (Vector2)transform.position).normalized * Random.Range(0f, 0.5f);
@@ -180,6 +176,8 @@ public class Spider : Entity
             MetalEffect();
             return false;
         }
+        injure += Mathf.RoundToInt(amount / 20);
+
         base.GetDamage(amount);
 
         return true;

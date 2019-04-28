@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public Vector2 maxSpeedRand;
     public Vector2 hpRand;
     public Vector2 attackSpeedRand;
+    public Vector2 damageRand;
 
     [Space]
     public GameObject spiderPrefab;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     public Color[] spiderColors;
 
+    public float minSpiderCount;
     public float spawnRadius;
     public float cameraRadius;
 
@@ -38,6 +40,8 @@ public class GameManager : MonoBehaviour
     public float legCost;
     public float eyeCost;
     public float armCost;
+
+    [Space]
 
     public static GameManager main;
 
@@ -64,6 +68,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(Vector2.zero, spawnRadius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(Camera.main.transform.position, cameraRadius);
+    }
+
     public void SpawnRandomSpider()
     {
         Vector2 pos = Random.insideUnitCircle * spawnRadius;
@@ -78,15 +90,16 @@ public class GameManager : MonoBehaviour
 
     public void SpawnRandomSpiderInPos(Vector2 pos)
     {
-        SpawnSpider(pos, GetRandom(scaleRand), GetRandom(movementSpeedRand), GetRandom(maxSpeedRand), GetRandom(hpRand), GetRandom(attackSpeedRand));
+        SpawnSpider(pos, GetRandom(scaleRand), GetRandom(movementSpeedRand), GetRandom(maxSpeedRand), GetRandom(hpRand), GetRandom(attackSpeedRand), GetRandom(damageRand));
     }
 
-    public void SpawnSpider(Vector2 pos, float scale, float moveSpeed, float maxSpeed, float health, float attackSpeed)
+    public void SpawnSpider(Vector2 pos, float scale, float moveSpeed, float maxSpeed, float health, float attackSpeed, float damage)
     {
         GameObject spiderGO = Instantiate(spiderPrefab, pos, Quaternion.identity);
 
         Spider spider = spiderGO.GetComponent<Spider>();
 
+        spider.damage = damage;
         spider.spiderScale = scale;
         spider.moveSpeed = moveSpeed;
         spider.maxSpeed = maxSpeed;
@@ -111,6 +124,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (entityList.Count < minSpiderCount)
+        {
+            SpawnRandomSpider();
+        }
     }
 }

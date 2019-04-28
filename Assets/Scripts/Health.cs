@@ -71,7 +71,6 @@ public class Health : MonoBehaviour
 
     public virtual bool GetDamage(float amount)
     {
-        print(name + " got " + amount + "damage");
         currentHealth -= amount;
 
         return CheckHealth();

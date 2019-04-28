@@ -14,6 +14,7 @@ public class EnemyInput : CharacterInput
     public float randomWaitTime;
     [Space]
     public float randomAttackTime;
+    public float randomShieldTime;
     float attackTimer;
     Vector2 currTargetPos;
     float waitTimer;
@@ -95,19 +96,28 @@ public class EnemyInput : CharacterInput
 
                     if (attackTimer <= 0)
                     {
-                        if (Random.Range(0, 3) == 1 || (spider && spider.isShielding))
+                        if (Random.Range(0, 10) > 3)
                         {
                             if (spider && spider.isShielding)
+                            {
                                 spider.isShielding = false;
+                            }
                             else
+                            {
                                 OnAttackButtonPressed();
+
+                            }
+                            attackTimer = Random.Range(randomAttackTime / 2, randomAttackTime);
                         }
                         else
                         {
                             if (spider)
+                            {
                                 spider.isShielding = true;
+                                attackTimer = Random.Range(randomShieldTime / 2, randomShieldTime);
+                            }
                         }
-                        attackTimer = Random.Range(randomAttackTime / 2, randomAttackTime);
+
                     }
                 }
             }
