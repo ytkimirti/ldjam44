@@ -17,6 +17,7 @@ public class EnemyInput : CharacterInput
     Vector2 currTargetPos;
     float waitTimer;
     Spider spider;
+    float searchTimer;
 
     void Start()
     {
@@ -34,8 +35,39 @@ public class EnemyInput : CharacterInput
         Gizmos.DrawWireSphere(transform.position, radius);
     }
 
+    Transform FindClosest()
+    {
+        float minDist = Mathf.Infinity;
+        int minID = -1;
+
+        for (int i = 0; i < GameManager.main.entityList.Count; i++)
+        {
+            Transform trans = GameManager.main.entityList[i].transform;
+
+            if (trans == transform)
+                continue;
+
+            float dist = (trans.position - transform.position).magnitude;
+
+            if (dist < minDist)
+            {
+                minDist = dist;
+                minID = i;
+            }
+        }
+
+        return GameManager.main.entityList[minID].transform;
+    }
+
     void Update()
     {
+        searchTimer -= Time.deltaTime;
+
+        if (searchTimer <= 0)
+        {
+            searchTimer = Random.Range(0.4f, 2);
+            target = FindClosest();
+        }
 
         float dist = 0;
 

@@ -6,23 +6,24 @@ using UnityEngine.Rendering;
 
 public class Spider : Entity
 {
+    public float spiderScale = 1;
+    float injureTimer;
+    public float injure;
     public bool isPlayer;
     public float moveSpeed;
     public float maxSpeed;
     public Color color;
     public Color secondColor;
     [Space]
-    public float moveSpeedIncrease;
-    [Space]
     public float damage;
-    [Space]
-    public float damageIncrease;
     public float dashSpeed;
     public float dashDelay;
     float dashTimer;
 
     public float attackDelay;
     float attackTimer;
+
+    public float darken;
 
     [Header("Limbs")]
     public int armCount;
@@ -59,8 +60,27 @@ public class Spider : Entity
 
         SpawnParts();
         SpawnHealthBar();
+        AddToList();
+
+        color = GameManager.main.spiderColors[Random.Range(0, GameManager.main.spiderColors.Length)];
+
+        secondColor = new Color(color.r * darken, color.g * darken, color.b * darken, 1);
 
         SetColor(color, secondColor);
+
+        UpdateScale(spiderScale);
+    }
+
+    public void UpdateScale(float scale)
+    {
+        maxSpeed /= scale;
+        moveSpeed /= scale;
+
+        currentHealth *= scale;
+        damage *= scale;
+        attackDelay /= scale;
+
+        transform.localScale = Vector3.one * scale;
     }
 
     void SpawnParts()
@@ -98,6 +118,8 @@ public class Spider : Entity
         if (isShielding)
             return;
 
+        injure++;
+
         ShakeEffect();
 
         Vector2 diff = ((Vector2)attackPos - (Vector2)transform.position).normalized * Random.Range(0f, 0.5f);
@@ -107,6 +129,13 @@ public class Spider : Entity
         ParticleManager.main.play(diff + (Vector2)visualParent.position, new Vector3(0, 0, diffAngle), 1);
 
         Instantiate(GameManager.main.gorePrefab, diff + (Vector2)visualParent.position, Quaternion.Euler(0, 0, diffAngle), mainSprite.transform);
+    }
+
+    public override void Die()
+    {
+        ParticleManager.main.play(transform.position, Vector2.zero, 2);
+
+        base.Die();
     }
 
     public override void AttackArea(Vector2 pos, float damage)
@@ -165,6 +194,16 @@ public class Spider : Entity
 
     void Update()
     {
+        if (injure != 0)
+        {
+            injureTimer -= Time.deltaTime;
+
+            if (injureTimer <= 0)
+            {
+                injureTimer = 1 / injure;
+                currentHealth -= 1;
+            }
+        }
         attackTimer -= Time.deltaTime;
 
         if (isPlayer)
@@ -181,7 +220,7 @@ public class Spider : Entity
 
     public override void OnAttackButtonPressed()
     {
-        if (attackTimer <= 0 && Vector2.Distance((Vector2)transform.position, input.targetInput) < meleeRadius)
+        if (!isShielding && attackTimer <= 0 && Vector2.Distance((Vector2)transform.position, input.targetInput) < meleeRadius)
         {
             attackTimer = attackDelay;
             AttackLimbs(input.targetInput);

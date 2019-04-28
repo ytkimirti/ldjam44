@@ -25,9 +25,11 @@ public class Health : MonoBehaviour
         if (!spawnHealthBar)
             return;
 
-        GameObject healthBarGO = Instantiate(GameManager.main.healthBarPrefab, transform.position + Vector3.up * healthBarHeight, Quaternion.identity, transform);
+        GameObject healthBarGO = Instantiate(GameManager.main.healthBarPrefab, transform.position + Vector3.up * healthBarHeight, Quaternion.identity, GameManager.main.canvasParent);
         healthBar = healthBarGO.GetComponent<HealthBar>();
         healthBar.currentHealth = Mathf.RoundToInt(currentHealth);
+        healthBar.offsetHeight = healthBarHeight;
+        healthBar.target = this.transform;
     }
 
     private void OnDrawGizmosSelected()

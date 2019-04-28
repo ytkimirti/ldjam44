@@ -10,9 +10,21 @@ public class Entity : Health
     public LayerMask attackLayer;
 
 
+    public void AddToList()
+    {
+        GameManager.main.entityList.Add(this);
+    }
+
     void Start()
     {
+        AddToList();
         SpawnHealthBar();
+    }
+
+    public override void Die()
+    {
+        GameManager.main.entityList.Remove(this);
+        base.Die();
     }
 
     public virtual void OnAttackButtonPressed()
