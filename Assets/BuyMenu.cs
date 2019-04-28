@@ -63,6 +63,9 @@ public class BuyMenu : MonoBehaviour
 
     public void Open()
     {
+        if (player.freeze)
+            return;
+
         if (isOn)
             return;
 
@@ -124,10 +127,10 @@ public class BuyMenu : MonoBehaviour
                 thingCount = player.legCount;
                 break;
             case "eye":
-                thingCount = player.legCount;
+                thingCount = player.eyeCount;
                 break;
             case "arm":
-                thingCount = player.legCount;
+                thingCount = player.armCount;
                 break;
         }
 

@@ -175,6 +175,9 @@ public class Limb : MonoBehaviour
                 if (spider)
                     isShielding = spider.isShielding;
 
+                if (spider && spider.freeze)
+                    isShielding = false;
+
                 Vector2 mouseExtra = Vector2.ClampMagnitude((input.targetInput - (Vector2)transform.position) / 4, jointLength * 1.7f);
 
                 float targetScale = isShielding ? 1 : 0;

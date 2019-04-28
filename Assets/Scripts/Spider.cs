@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.PostProcessing;
 using UnityEngine.Rendering;
+using EZCameraShake;
 
 public class Spider : Entity
 {
+    public bool freeze = false;
     public float spiderScale = 1;
     float injureTimer;
     public float injure;
@@ -22,7 +25,6 @@ public class Spider : Entity
 
     public float attackDelay;
     float attackTimer;
-
     public float darken;
 
     [Header("Limbs")]
@@ -38,6 +40,7 @@ public class Spider : Entity
     Limb[] arms;
     Limb[] legs;
     public bool isShielding;
+    public PostProcessingProfile profile;
 
     [Header("References")]
     public SpriteRenderer mainSprite;
@@ -68,6 +71,23 @@ public class Spider : Entity
         SetColor(color, secondColor);
 
         UpdateScale(spiderScale);
+
+        if (isPlayer)
+        {
+            Invoke("IntroThing", 7.5f);
+            Invoke("NoFreeze", 11);
+        }
+    }
+
+    public void NoFreeze()
+    {
+        freeze = false;
+    }
+
+    public void IntroThing()
+    {
+        AttackArea(Vector2.zero, 40, true);
+
     }
 
     public void UpdateParts()
@@ -81,6 +101,36 @@ public class Spider : Entity
         SpawnParts();
 
         SetColor(color, secondColor);
+
+        if (isPlayer)
+            GameManager.main.pixelCam.pixelsPerUnit = Mathf.RoundToInt(GameManager.main.sightOverEye * eyeCount + GameManager.main.defSight);
+
+        searchArea = GameManager.main.defArea + GameManager.main.areaIncreaseOverEye * eyeCount;
+
+        if (isPlayer && eyeCount == 1)
+        {
+            profile.motionBlur.enabled = true;
+            profile.chromaticAberration.enabled = true;
+            profile.bloom.enabled = false;
+            profile.grain.enabled = false;
+            profile.vignette.enabled = true;
+        }
+        else if (isPlayer && eyeCount == 0)
+        {
+            profile.motionBlur.enabled = true;
+            profile.chromaticAberration.enabled = true;
+            profile.bloom.enabled = true;
+            profile.grain.enabled = true;
+            profile.vignette.enabled = true;
+        }
+        else
+        {
+            profile.motionBlur.enabled = false;
+            profile.chromaticAberration.enabled = false;
+            profile.bloom.enabled = false;
+            profile.grain.enabled = false;
+            profile.vignette.enabled = false;
+        }
 
         moveSpeed = GameManager.main.movementSpeedPerLeg * legCount;
         maxSpeed = GameManager.main.maxSpeedPerLeg * legCount;
@@ -192,20 +242,24 @@ public class Spider : Entity
 
     public override void Die()
     {
+        AudioManager.main.Play("die");
         ParticleManager.main.play(transform.position, Vector2.zero, 2);
 
         base.Die();
     }
 
-    public override void AttackArea(Vector2 pos, float damage)
+    public override void AttackArea(Vector2 pos, float damage, bool isUnique)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, searchArea, attackLayer);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, isUnique ? 3 : searchArea, attackLayer);
 
         for (int i = 0; i < colliders.Length; i++)
         {
             Collider2D col = colliders[i];
 
-            if (!col || col.gameObject == this.gameObject)
+            if (!col)
+                return;
+
+            if (!isUnique && col.gameObject == this.gameObject)
                 return;
 
             Health hp = col.gameObject.GetComponent<Health>();
@@ -219,12 +273,18 @@ public class Spider : Entity
                     hp.GetComponent<Entity>().AddGore(transform.position);
                 }
 
-                if (isHit)
+                if (isUnique && isPlayer)
+                    AudioManager.main.Play("gore");
+
+                if (isHit && !isUnique)
                 {
                     GameManager.main.Drop(Mathf.RoundToInt(damage), hp.transform.position, transform, hp.transform.localScale.x / 2);
                     currentHealth += damage;
 
                     CheckHealth();
+
+                    if (isPlayer)
+                        AudioManager.main.Play("gore");
                 }
             }
         }
@@ -232,11 +292,20 @@ public class Spider : Entity
 
     public override bool GetDamage(float amount)
     {
+
+
         if (isShielding)
         {
+            if (isPlayer)
+                AudioManager.main.Play("metal");
+
             MetalEffect();
             return false;
         }
+
+        if (isPlayer)
+            AudioManager.main.Play("gore");
+
         injure += Mathf.RoundToInt(amount / 20);
 
         base.GetDamage(amount);
@@ -265,6 +334,7 @@ public class Spider : Entity
 
     void Update()
     {
+
         if (injure != 0)
         {
             injureTimer -= Time.deltaTime;
@@ -293,11 +363,11 @@ public class Spider : Entity
 
     public override void OnAttackButtonPressed()
     {
-        if (!isShielding && attackTimer <= 0 && Vector2.Distance((Vector2)transform.position, input.targetInput) < meleeRadius)
+        if (!freeze && armCount != 0 && !isShielding && attackTimer <= 0 && Vector2.Distance((Vector2)transform.position, input.targetInput) < meleeRadius)
         {
             attackTimer = attackDelay;
             AttackLimbs(input.targetInput);
-            AttackArea(input.targetInput, damage);
+            AttackArea(input.targetInput, damage, false);
         }
     }
 
@@ -360,6 +430,8 @@ public class Spider : Entity
     void FixedUpdate()
     {
 
+        if (freeze)
+            return;
 
         rb.AddForce(moveSpeed * input.movementInput);
 

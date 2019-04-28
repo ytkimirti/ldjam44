@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Vector2 attackSpeedRand;
     public Vector2 damageRand;
     public TextMeshProUGUI currentHealth;
+    public GameObject[] leafPrefab;
+    public int[] leafCount;
 
     [Space]
     public GameObject spiderPrefab;
@@ -36,6 +38,11 @@ public class GameManager : MonoBehaviour
     public float maxSpeedPerLeg;
     public float damagePerArm;
     public float sightOverEye;
+    public float areaIncreaseOverEye;
+    public float defArea;
+    public float defSight;
+
+    public PixelCamera pixelCam;
 
 
     public Transform cameraTopTrans;
@@ -51,7 +58,21 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        /*
+        for (int j = 0; j < leafCount.Length; j++)
+        {
+            for (int i = 0; i < leafCount[i]; i++)
+            {
+                Instantiate(leafPrefab[j], spawnRadius * Random.insideUnitCircle, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+            }
+        }
+         */
+
+
         SpawnSpiders(10);
+
+        defSight = pixelCam.pixelsPerUnit;
+        defArea = player.searchArea;
 
         movementSpeedPerLeg = player.moveSpeed / player.legCount;
         maxSpeedPerLeg = player.maxSpeed / player.legCount;

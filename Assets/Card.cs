@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Card : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class Card : MonoBehaviour
 
     void Start()
     {
-
+        GetComponentInChildren<TextMeshProUGUI>().text = cost.ToString();
+        print("What het");
     }
 
     void Update()
