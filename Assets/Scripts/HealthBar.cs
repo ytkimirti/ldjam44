@@ -10,9 +10,11 @@ public class HealthBar : MonoBehaviour
     public float screenOffset;
     public float offsetHeight;
     public int currentHealth;
+    public int currentInjure;
     int textHealth;
     [Space]
     public TextMeshProUGUI textMesh;
+    public TextMeshProUGUI injureText;
     public Transform bloodSprite;
     public float delay;
     float timer;
@@ -52,6 +54,9 @@ public class HealthBar : MonoBehaviour
             Die();
 
         timer -= Time.deltaTime;
+
+        if (injureText)
+            injureText.text = "-" + currentInjure.ToString();
 
         if (textHealth != currentHealth && timer <= 0)
         {

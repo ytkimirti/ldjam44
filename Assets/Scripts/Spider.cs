@@ -39,7 +39,6 @@ public class Spider : Entity
     Limb[] legs;
     public bool isShielding;
 
-
     [Header("References")]
     public SpriteRenderer mainSprite;
     public GameObject limbPrefab;
@@ -71,6 +70,53 @@ public class Spider : Entity
         UpdateScale(spiderScale);
     }
 
+    public void UpdateParts()
+    {
+        legCount = Mathf.Clamp(legCount, 0, legSpots.Length);
+        armCount = Mathf.Clamp(armCount, 0, armSpots.Length);
+        eyeCount = Mathf.Clamp(eyeCount, 0, eyeSpots.Length);
+
+        DestroyLimbs();
+
+        SpawnParts();
+
+        SetColor(color, secondColor);
+
+        moveSpeed = GameManager.main.movementSpeedPerLeg * legCount;
+        maxSpeed = GameManager.main.maxSpeedPerLeg * legCount;
+
+        damage = GameManager.main.damagePerArm * armCount;
+    }
+
+    public override void UpdateHealthBar()
+    {
+        base.UpdateHealthBar();
+
+        healthBar.currentInjure = Mathf.RoundToInt(injure);
+    }
+
+    public void DestroyLimbs()
+    {
+        foreach (Limb limb in legs)
+        {
+            Destroy(limb.gameObject);
+        }
+
+        foreach (Limb limb in arms)
+        {
+            Destroy(limb.gameObject);
+        }
+
+        foreach (Eye eye in eyes)
+        {
+            Destroy(eye.gameObject);
+        }
+
+        eyes = new Eye[0];
+        legs = new Limb[0];
+        arms = new Limb[0];
+    }
+
     public void UpdateScale(float scale)
     {
         maxSpeed /= scale;
@@ -81,6 +127,21 @@ public class Spider : Entity
         attackDelay /= scale;
 
         transform.localScale = Vector3.one * scale;
+    }
+
+    public void ClearInjures()
+    {
+        injure /= 2;
+
+        int times = mainSprite.transform.childCount / 2;
+
+        foreach (Transform child in mainSprite.transform)
+        {
+            times--;
+            if (times <= 0)
+                break;
+            Destroy(child.gameObject);
+        }
     }
 
     void SpawnParts()

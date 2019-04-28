@@ -24,6 +24,8 @@ public class Eye : MonoBehaviour
         input = GetComponentInParent<CharacterInput>();
 
         eyeTimer = Random.Range(1, randomEyeTime);
+
+        eyelash.gameObject.SetActive(false);
     }
 
     public void SetColor(Color col)

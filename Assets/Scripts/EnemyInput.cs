@@ -10,7 +10,6 @@ public class EnemyInput : CharacterInput
     public bool alarmed;
 
     [Header("Random Movement")]
-    public float randomMovementDistance;
     public float randomWaitTime;
     [Space]
     public float randomAttackTime;
@@ -28,7 +27,7 @@ public class EnemyInput : CharacterInput
         spider = GetComponent<Spider>();
 
         attackTimer = randomAttackTime;
-        currTargetPos = randomMovementDistance * Random.insideUnitCircle;
+        currTargetPos = GameManager.main.spawnRadius * 0.9f * Random.insideUnitCircle;
     }
 
     private void OnDrawGizmos()
@@ -82,6 +81,9 @@ public class EnemyInput : CharacterInput
 
         alarmed = dist < radius;
 
+        if (spider && spider.injure == 0)
+            alarmed = false;
+
         if (target && alarmed)
         {
             movementInput = (target.position - transform.position).normalized;
@@ -134,7 +136,7 @@ public class EnemyInput : CharacterInput
             if (waitTimer <= 0)
             {
                 waitTimer = Random.Range(randomWaitTime / 2, randomWaitTime);
-                currTargetPos = randomMovementDistance * Random.insideUnitCircle;
+                currTargetPos = GameManager.main.spawnRadius * 0.9f * Random.insideUnitCircle;
             }
 
             movementInput = (currTargetPos - (Vector2)transform.position).normalized / 2;

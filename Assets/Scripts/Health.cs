@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     public float maxHealth;
     [Space]
     public float currentHealth;
-    HealthBar healthBar;
+    public HealthBar healthBar;
 
     void Start()
     {
@@ -27,6 +27,7 @@ public class Health : MonoBehaviour
 
         GameObject healthBarGO = Instantiate(GameManager.main.healthBarPrefab, transform.position + Vector3.up * healthBarHeight, Quaternion.identity, GameManager.main.canvasParent);
         healthBar = healthBarGO.GetComponent<HealthBar>();
+        healthBarGO.transform.SetAsFirstSibling();
         healthBar.currentHealth = Mathf.RoundToInt(currentHealth);
         healthBar.offsetHeight = healthBarHeight;
         healthBar.target = this.transform;
@@ -51,7 +52,7 @@ public class Health : MonoBehaviour
         return false;
     }
 
-    public void UpdateHealthBar()
+    public virtual void UpdateHealthBar()
     {
         if (!spawnHealthBar)
             return;

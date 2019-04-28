@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using EZ_Pooling;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public Spider player;
     public List<Entity> entityList;
     public Vector2 scaleRand;
     public Vector2 movementSpeedRand;
@@ -12,6 +14,7 @@ public class GameManager : MonoBehaviour
     public Vector2 hpRand;
     public Vector2 attackSpeedRand;
     public Vector2 damageRand;
+    public TextMeshProUGUI currentHealth;
 
     [Space]
     public GameObject spiderPrefab;
@@ -29,17 +32,13 @@ public class GameManager : MonoBehaviour
 
     [Header("Stats")]
 
-    public float movementSpeedIncreaseOverLeg;
-
+    public float movementSpeedPerLeg;
+    public float maxSpeedPerLeg;
+    public float damagePerArm;
     public float sightOverEye;
 
-    public float speedOverScale;
 
-    public float damageOverArm;
-    [Space]
-    public float legCost;
-    public float eyeCost;
-    public float armCost;
+    public Transform cameraTopTrans;
 
     [Space]
 
@@ -53,6 +52,25 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SpawnSpiders(10);
+
+        movementSpeedPerLeg = player.moveSpeed / player.legCount;
+        maxSpeedPerLeg = player.maxSpeed / player.legCount;
+
+        damagePerArm = player.damage / player.armCount;
+    }
+
+    public void IncreaseHP(float amount)
+    {
+        player.currentHealth += amount;
+
+        Drop(Mathf.RoundToInt(amount), cameraTopTrans.position, player.transform, 0.5f);
+    }
+
+    public void DecreaseHP(float amount)
+    {
+        player.currentHealth -= amount;
+
+        Drop(Mathf.RoundToInt(amount), player.transform.position, cameraTopTrans, 0.5f);
     }
 
     float GetRandom(Vector2 vec)
@@ -124,6 +142,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (player)
+        {
+            currentHealth.text = Mathf.RoundToInt(player.currentHealth).ToString();
+        }
+
         if (entityList.Count < minSpiderCount)
         {
             SpawnRandomSpider();
