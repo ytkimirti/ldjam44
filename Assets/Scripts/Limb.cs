@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Rendering;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class Limb : MonoBehaviour
 {
 
@@ -18,12 +18,15 @@ public class Limb : MonoBehaviour
     public SpriteRenderer joint0Sprite;
     public SpriteRenderer joint1Sprite;
     public SpriteRenderer feetSprite;
+    public ParticleSystem metalParticle;
     [Space]
+    public GameObject shieldGO;
     public GameObject knifeGO;
     public GameObject feetGO;
     public GameObject gunGO;
     [Space]
     public GameObject bulletPrefab;
+    Vector3 shieldDefScale;
 
     [Header("Walking")]
     public bool isWalking;
@@ -38,6 +41,7 @@ public class Limb : MonoBehaviour
 
     [Header("Arms")]
 
+    public bool isShielding;
     public bool isArm;
     public bool isKnife;
     public float armHeight;
@@ -51,6 +55,8 @@ public class Limb : MonoBehaviour
     [HideInInspector]
     public CharacterInput input;
 
+    Spider spider;
+
     bool isTweening;
     Vector2 defPos;
     Vector2 currPos;
@@ -63,6 +69,10 @@ public class Limb : MonoBehaviour
         {
             target.localPosition = new Vector3(-target.localPosition.x, target.localPosition.y, 0);
         }
+
+        shieldDefScale = shieldGO.transform.localScale;
+        shieldGO.transform.localScale = Vector3.zero;
+        shieldGO.SetActive(true);
     }
 
     public void SetColor(Color mainCol, Color secondCol)
@@ -74,6 +84,7 @@ public class Limb : MonoBehaviour
 
     void Start()
     {
+        spider = GetComponentInParent<Spider>();
         input = GetComponentInParent<CharacterInput>();
 
         ChangeType(limbType);
@@ -161,11 +172,23 @@ public class Limb : MonoBehaviour
             }
             else if (isArm)
             {
-                Vector2 mouseExtra = Vector2.ClampMagnitude((input.targetInput - (Vector2)target.position) / 4, jointLength * 1.9f);
+                if (spider)
+                    isShielding = spider.isShielding;
+
+                Vector2 mouseExtra = Vector2.ClampMagnitude((input.targetInput - (Vector2)transform.position) / 4, jointLength * 1.7f);
+
+                float targetScale = isShielding ? 1 : 0;
+
+                shieldGO.transform.localScale = shieldDefScale * Mathf.Lerp(shieldGO.transform.localScale.z, targetScale, 0.3f);
+
+                if (isShielding)
+                {
+                    mouseExtra = Vector2.ClampMagnitude(input.targetInput - (Vector2)transform.position, jointLength * 1);
+                }
 
                 isRight = mouseExtra.x > 0;
 
-                target.position = Vector2.Lerp(target.position, defPos + (Vector2)transform.position + mouseExtra, lerpSpeed * Time.deltaTime);
+                target.position = Vector2.Lerp(target.position, (isShielding ? Vector2.zero : defPos) + (Vector2)transform.position + mouseExtra, lerpSpeed * Time.deltaTime);
             }
         }
         else

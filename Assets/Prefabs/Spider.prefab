@@ -386,6 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4088781818238304}
   - component: {fileID: 212986734736558952}
+  - component: {fileID: 331093779880010804}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -899,21 +900,23 @@ MonoBehaviour:
   hasMaxHealth: 0
   maxHealth: 0
   currentHealth: 100
-  meleeRadius: 3
+  meleeRadius: 4
   searchArea: 0.3
   attackLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  attackDelay: 0
   isPlayer: 0
   moveSpeed: 35
   maxSpeed: 3
-  color: {r: 0.9251371, g: 0.36224046, b: 0.9852941, a: 1}
-  secondColor: {r: 0.84296465, g: 0.40560123, b: 0.8897059, a: 1}
+  color: {r: 0.40511462, g: 0.9338235, b: 0.78068024, a: 1}
+  secondColor: {r: 0.11916091, g: 0.5588235, b: 0.46785864, a: 1}
   moveSpeedIncrease: 0
   damage: 40
   damageIncrease: 0
   dashSpeed: 40
   dashDelay: 1
+  attackDelay: 0.6
   armCount: 2
   legCount: 4
   eyeCount: 2
@@ -939,6 +942,7 @@ MonoBehaviour:
   - {fileID: 4470813884490454}
   - {fileID: 4166923083348004}
   - {fileID: 4910528512430516}
+  isShielding: 0
   mainSprite: {fileID: 212986734736558952}
   limbPrefab: {fileID: 1047902288923758, guid: 90ed944d2c447e74898befec35a90a9f, type: 2}
   eyePrefab: {fileID: 1975244412048424, guid: 0dd88710f733e9f41ad73a72eff6dd0c, type: 2}
@@ -999,3 +1003,46 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!331 &331093779880010804
+SpriteMask:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1975780716734312}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: d3ff92b8f59c7d94aba7c1903eb50da2, type: 3}
+  m_MaskAlphaCutoff: 0.2
+  m_FrontSortingLayerID: 0
+  m_BackSortingLayerID: 0
+  m_FrontSortingLayer: 0
+  m_BackSortingLayer: 0
+  m_FrontSortingOrder: 0
+  m_BackSortingOrder: 0
+  m_IsCustomRangeActive: 0

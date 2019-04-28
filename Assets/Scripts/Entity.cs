@@ -9,6 +9,7 @@ public class Entity : Health
     public float searchArea;
     public LayerMask attackLayer;
 
+
     void Start()
     {
         SpawnHealthBar();

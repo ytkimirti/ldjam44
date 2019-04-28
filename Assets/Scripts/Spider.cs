@@ -21,6 +21,9 @@ public class Spider : Entity
     public float dashDelay;
     float dashTimer;
 
+    public float attackDelay;
+    float attackTimer;
+
     [Header("Limbs")]
     public int armCount;
     public int legCount;
@@ -33,6 +36,7 @@ public class Spider : Entity
     Eye[] eyes;
     Limb[] arms;
     Limb[] legs;
+    public bool isShielding;
 
 
     [Header("References")]
@@ -68,6 +72,14 @@ public class Spider : Entity
         SpawnEyes();
     }
 
+    public void MetalEffect()
+    {
+        foreach (Limb arm in arms)
+        {
+            arm.metalParticle.Play();
+        }
+    }
+
     public void ShakeEffect()
     {
         foreach (Eye eye in eyes)
@@ -82,6 +94,10 @@ public class Spider : Entity
 
     public override void AddGore(Vector2 attackPos)
     {
+
+        if (isShielding)
+            return;
+
         ShakeEffect();
 
         Vector2 diff = ((Vector2)attackPos - (Vector2)transform.position).normalized * Random.Range(0f, 0.5f);
@@ -90,7 +106,7 @@ public class Spider : Entity
 
         ParticleManager.main.play(diff + (Vector2)visualParent.position, new Vector3(0, 0, diffAngle), 1);
 
-        Instantiate(GameManager.main.gorePrefab, diff + (Vector2)visualParent.position, Quaternion.Euler(0, 0, diffAngle), visualParent);
+        Instantiate(GameManager.main.gorePrefab, diff + (Vector2)visualParent.position, Quaternion.Euler(0, 0, diffAngle), mainSprite.transform);
     }
 
     public override void AttackArea(Vector2 pos, float damage)
@@ -118,6 +134,16 @@ public class Spider : Entity
         }
     }
 
+    public override void GetDamage(float amount)
+    {
+        if (isShielding)
+        {
+            MetalEffect();
+            return;
+        }
+        base.GetDamage(amount);
+    }
+
     public void SetColor(Color col, Color sec)
     {
         foreach (Limb arm in arms)
@@ -139,6 +165,11 @@ public class Spider : Entity
 
     void Update()
     {
+        attackTimer -= Time.deltaTime;
+
+        if (isPlayer)
+            isShielding = Input.GetKey(KeyCode.Mouse1);
+
         UpdateHealthBar();
 
         sort.sortingOrder = Mathf.RoundToInt(transform.position.y * -10);
@@ -150,8 +181,9 @@ public class Spider : Entity
 
     public override void OnAttackButtonPressed()
     {
-        if (Vector2.Distance((Vector2)transform.position, (Vector2)input.targetInput) < meleeRadius)
+        if (attackTimer <= 0 && Vector2.Distance((Vector2)transform.position, input.targetInput) < meleeRadius)
         {
+            attackTimer = attackDelay;
             AttackLimbs(input.targetInput);
             AttackArea(input.targetInput, damage);
         }
@@ -215,6 +247,8 @@ public class Spider : Entity
 
     void FixedUpdate()
     {
+
+
         rb.AddForce(moveSpeed * input.movementInput);
 
         if (dashTimer < dashDelay / 2)

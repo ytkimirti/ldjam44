@@ -33,6 +33,7 @@ public class Eye : MonoBehaviour
 
     public void Wink()
     {
+        eyelash.gameObject.SetActive(true);
         eyelash.DORewind();
 
         eyelash.DOKill();
@@ -43,9 +44,14 @@ public class Eye : MonoBehaviour
 
         winkSeq.AppendInterval(eyeCloseSpeed);
 
-        winkSeq.Append(eyelash.transform.DOLocalMoveY(1, eyeCloseSpeed));
+        winkSeq.Append(eyelash.transform.DOLocalMoveY(1, eyeCloseSpeed)).OnComplete(DisableEyelash);
 
         winkSeq.Play();
+    }
+
+    void DisableEyelash()
+    {
+        eyelash.gameObject.SetActive(false);
     }
 
     void Update()
