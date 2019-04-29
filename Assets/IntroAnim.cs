@@ -7,21 +7,42 @@ using TMPro;
 public class IntroAnim : MonoBehaviour
 {
 
+    public static IntroAnim main;
     public TextMeshProUGUI text;
     public Transform newPopup;
+    public Transform skipButton;
 
     public string[] texts;
     public float delay;
 
     public float firstDelay;
 
+    public bool isIntroDone = false;
+
+    private void Awake()
+    {
+        main = this;
+    }
+
     void Start()
     {
-        StartCoroutine(anim());
+        StartCoroutine("anim");
     }
 
     void Update()
     {
+
+    }
+
+    public void SkipIntro()
+    {
+        print("Skipping intro");
+        StopCoroutine("anim");
+        GameManager.main.player.SkipIntro();
+
+        skipButton.DOScale(Vector3.zero, 1).SetEase(Ease.OutBack);
+        newPopup.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
+        text.transform.parent.DOScale(Vector2.zero, 0.5f);
 
     }
 

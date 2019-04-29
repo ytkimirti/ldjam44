@@ -4471,7 +4471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBuy: 1
   type: cure
-  cost: 300
+  cost: 150
   menu: {fileID: 245701724}
 --- !u!114 &147436316
 MonoBehaviour:
@@ -4700,9 +4700,9 @@ MonoBehaviour:
   player: {fileID: 1954725470}
   entityList: []
   scaleRand: {x: 0.6, y: 1.2}
-  movementSpeedRand: {x: 40, y: 60}
-  maxSpeedRand: {x: 2, y: 4}
-  hpRand: {x: 50, y: 210}
+  movementSpeedRand: {x: 40, y: 30}
+  maxSpeedRand: {x: 2, y: 2}
+  hpRand: {x: 50, y: 65}
   attackSpeedRand: {x: 0.3, y: 0.5}
   damageRand: {x: 40, y: 80}
   currentHealth: {fileID: 119517762}
@@ -5122,7 +5122,7 @@ RectTransform:
   - {fileID: 984348471}
   - {fileID: 1541095390}
   m_Father: {fileID: 419675974}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9495,11 +9495,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1664018367}
-  - {fileID: 245701721}
   - {fileID: 617172387}
   - {fileID: 1246418065}
   - {fileID: 1672606717}
   - {fileID: 1642477445}
+  - {fileID: 245701721}
   - {fileID: 1382150178}
   - {fileID: 322017021}
   m_Father: {fileID: 0}
@@ -10823,7 +10823,7 @@ RectTransform:
   m_Children:
   - {fileID: 289926596}
   m_Father: {fileID: 419675974}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -23756,7 +23756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1246418065
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23769,7 +23769,7 @@ RectTransform:
   m_Children:
   - {fileID: 1474708277}
   m_Father: {fileID: 419675974}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -23788,7 +23788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -23814,7 +23814,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1246418067}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1519749362}
+        m_MethodName: SkipIntro
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1246418067
@@ -28873,6 +28884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 423764947}
   newPopup: {fileID: 1642477445}
+  skipButton: {fileID: 1246418065}
   texts:
   - What a beatiful day!
   - What could even happen?
@@ -28882,6 +28894,7 @@ MonoBehaviour:
   - I HAVE TO ATTACK SOMEONE
   delay: 3
   firstDelay: 2
+  isIntroDone: 0
 --- !u!1 &1541095389
 GameObject:
   m_ObjectHideFlags: 0
@@ -29614,7 +29627,7 @@ RectTransform:
   m_Children:
   - {fileID: 517464330}
   m_Father: {fileID: 419675974}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -33491,7 +33504,7 @@ RectTransform:
   - {fileID: 691240214}
   - {fileID: 423764946}
   m_Father: {fileID: 419675974}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

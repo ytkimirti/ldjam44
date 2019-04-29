@@ -182,6 +182,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Application.LoadLevel(0);
@@ -194,6 +195,10 @@ public class GameManager : MonoBehaviour
 
         if (player)
         {
+            hpRand.x = player.currentHealth * 1.5f;
+
+            damageRand.x = player.damage * 1.3f;
+
             currentHealth.text = Mathf.RoundToInt(player.currentHealth).ToString();
         }
 

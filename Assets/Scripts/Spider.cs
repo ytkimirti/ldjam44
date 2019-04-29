@@ -60,9 +60,61 @@ public class Spider : Entity
         input = GetComponent<CharacterInput>();
         rb = GetComponent<Rigidbody2D>();
 
+        if (GetComponent<PlayerInput>())
+            isPlayer = true;
+
+        if (!isPlayer)
+        {
+            if (currentHealth < 40)
+            {
+                legCount = 2;
+                eyeCount = 1;
+                armCount = 1;
+            }
+            else if (currentHealth < 70)
+            {
+                legCount = 2;
+                eyeCount = 2;
+                armCount = 2;
+            }
+            else if (currentHealth < 150)
+            {
+                legCount = 4;
+                eyeCount = 2;
+                armCount = 2;
+            }
+            else if (currentHealth < 220)
+            {
+                legCount = 4;
+                eyeCount = 3;
+                armCount = 3;
+            }
+            else if (currentHealth < 280)
+            {
+                legCount = 4;
+                eyeCount = 3;
+                armCount = 4;
+            }
+            else
+            {
+                legCount = 6;
+                eyeCount = 5;
+                armCount = 6;
+            }
+        }
+
         SpawnParts();
         SpawnHealthBar();
         AddToList();
+
+        if (isPlayer)
+        {
+            profile.bloom.enabled = false;
+            profile.chromaticAberration.enabled = false;
+            profile.vignette.enabled = false;
+            profile.motionBlur.enabled = false;
+            profile.grain.enabled = false;
+        }
 
         color = GameManager.main.spiderColors[Random.Range(0, GameManager.main.spiderColors.Length)];
 
@@ -77,11 +129,19 @@ public class Spider : Entity
             isPlayer = true;
 
         print("Starting croutine " + isPlayer);
+
         if (isPlayer)
         {
 
             StartCoroutine(thing());
         }
+
+    }
+
+    public void SkipIntro()
+    {
+        IntroThing();
+        NoFreeze();
     }
 
     IEnumerator thing()
@@ -89,9 +149,15 @@ public class Spider : Entity
         print("im inside maan");
         yield return new WaitForSeconds(7.5f);
 
+        if (IntroAnim.main.isIntroDone)
+            yield break;
+
         IntroThing();
 
         yield return new WaitForSeconds(3.5f);
+
+        if (IntroAnim.main.isIntroDone)
+            yield break;
 
         NoFreeze();
     }
