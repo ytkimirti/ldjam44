@@ -195,9 +195,9 @@ public class GameManager : MonoBehaviour
 
         if (player)
         {
-            hpRand.x = player.currentHealth * 1.5f;
+            hpRand.x = player.currentHealth * 1.3f;
 
-            damageRand.x = player.damage * 1.3f;
+            damageRand.x = player.damage * 0.6f;
 
             currentHealth.text = Mathf.RoundToInt(player.currentHealth).ToString();
         }

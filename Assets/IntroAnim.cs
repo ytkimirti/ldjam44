@@ -7,6 +7,7 @@ using TMPro;
 public class IntroAnim : MonoBehaviour
 {
 
+    public GameObject hand;
     public static IntroAnim main;
     public TextMeshProUGUI text;
     public Transform newPopup;
@@ -40,10 +41,11 @@ public class IntroAnim : MonoBehaviour
         StopCoroutine("anim");
         GameManager.main.player.SkipIntro();
 
-        skipButton.DOScale(Vector3.zero, 1).SetEase(Ease.OutBack);
-        newPopup.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
-        text.transform.parent.DOScale(Vector2.zero, 0.5f);
-
+        skipButton.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutExpo);
+        newPopup.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutExpo);
+        text.transform.parent.DOScale(Vector2.zero, 0.5f).SetEase(Ease.InOutExpo);
+        GetComponent<Animator>().enabled = false;
+        hand.SetActive(false);
     }
 
     IEnumerator anim()
@@ -64,7 +66,7 @@ public class IntroAnim : MonoBehaviour
 
         newPopup.transform.DOScale(Vector3.one, 1).SetEase(Ease.OutElastic);
 
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(8);
 
         newPopup.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine);
     }

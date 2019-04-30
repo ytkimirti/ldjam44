@@ -887,11 +887,13 @@ MonoBehaviour:
   hasMaxHealth: 0
   maxHealth: 0
   currentHealth: 100
+  healthBar: {fileID: 0}
   meleeRadius: 4
   searchArea: 0.3
   attackLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  freeze: 0
   spiderScale: 1
   injure: 0
   isPlayer: 0
@@ -930,6 +932,7 @@ MonoBehaviour:
   - {fileID: 4166923083348004}
   - {fileID: 4910528512430516}
   isShielding: 0
+  profile: {fileID: 0}
   mainSprite: {fileID: 212986734736558952}
   limbPrefab: {fileID: 1047902288923758, guid: 90ed944d2c447e74898befec35a90a9f, type: 2}
   eyePrefab: {fileID: 1975244412048424, guid: 0dd88710f733e9f41ad73a72eff6dd0c, type: 2}
@@ -952,10 +955,9 @@ MonoBehaviour:
   target: {fileID: 0}
   radius: 5.42
   alarmed: 0
-  randomMovementDistance: 5
   randomWaitTime: 4
-  randomAttackTime: 0.8
-  randomShieldTime: 1
+  randomAttackTime: 1.1
+  randomShieldTime: 0.7
 --- !u!210 &210603948025707542
 SortingGroup:
   m_ObjectHideFlags: 1

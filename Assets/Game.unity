@@ -4704,7 +4704,7 @@ MonoBehaviour:
   maxSpeedRand: {x: 2, y: 2}
   hpRand: {x: 50, y: 65}
   attackSpeedRand: {x: 0.3, y: 0.5}
-  damageRand: {x: 40, y: 80}
+  damageRand: {x: 40, y: 60}
   currentHealth: {fileID: 119517762}
   leafPrefab:
   - {fileID: 988427598}
@@ -28882,6 +28882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 508c3624787ef60448d4d39f25568986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hand: {fileID: 687779318}
   text: {fileID: 423764947}
   newPopup: {fileID: 1642477445}
   skipButton: {fileID: 1246418065}
@@ -28889,7 +28890,6 @@ MonoBehaviour:
   - What a beatiful day!
   - What could even happen?
   - WHAT THE!?!?
-  - WHY DID YOU DO THAT
   - I AM LOOSING BLOOD
   - I HAVE TO ATTACK SOMEONE
   delay: 3
